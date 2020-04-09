@@ -10,6 +10,14 @@
     .col-sm-10
       = f.email_field :email, class: 'form-control', autofocus: true, autocomplete: "email"
   .form-group.row
+    = f.label :name, class: 'col-sm-2 col-form-label'
+    .col-sm-10
+      = f.text_field :name, class: 'form-control', autofocus: true
+  .form-group.row
+    = f.label :address, class: 'col-sm-2 col-form-label'
+    .col-sm-10
+      = f.text_field :address, class: 'form-control', autofocus: true
+  .form-group.row
     .col-sm-4
       = f.label :password, class: 'col-form-label'
       - if @minimum_password_length

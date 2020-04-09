@@ -1,0 +1,16 @@
+.h3.text-center Products
+
+.card-columns
+  - allow_edit = current_user.has_role? :admin
+  - Product.enabled.order(order: :desc).each do |product|
+    .card
+      = cl_image_tag product.photo.thumb, secure: true, class: 'card-img-top img-fluid'
+      .card-body
+        .card-title
+          = product.name
+          - if allow_edit
+            = link_to edit_product_path(product) do
+              %i.far.fa-edit
+        .card-text= product.description
+        = link_to product_path(product), class: 'card-link' do
+          %i.far.fa-eye

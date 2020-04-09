@@ -1,0 +1,9 @@
+.h3.text-center
+  = @product.name
+  - if current_user.has_role? :admin
+    = link_to edit_product_path(@product) do
+      %i.far.fa-edit
+
+= cl_image_tag @product.photo.standard, secure: true, class: 'card-img-top img-fluid'
+= @product.description
+= @product.price

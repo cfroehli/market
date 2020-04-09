@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  rolify
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable
@@ -7,6 +8,10 @@ class User < ApplicationRecord
   validates_format_of :username, with: /\A[a-zA-Z0-9_\.]+\z/
 
   attr_writer :login
+
+  after_create do
+    self.add_role :user if self.roles.blank?
+  end
 
   def login
     @login || self.username || self.email

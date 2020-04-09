@@ -6,5 +6,7 @@ Rails.application.routes.draw do
     post :stop_impersonating, on: :collection
   end
 
-  root to: "users#dashboard"
+  resources :products, except: [:destroy]
+
+  root to: "products#index"
 end

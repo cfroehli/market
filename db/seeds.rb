@@ -9,13 +9,25 @@
 
 u = User.find_by(username: 'toto')
 if u.nil?
-  u = User.new(username: 'toto', email: 'toto@hazeliris.com', password: 'totopass', admin: true)
+  u = User.new(username: 'toto', name: 'Toto', address: 'Here', email: 'toto@hazeliris.com', password: 'totopass')
+  u.add_role :admin
   u.save
 end
 
 
 u = User.find_by(username: 'titi')
 if u.nil?
-  u = User.new(username: 'titi', email: 'titi@hazeliris.com', password: 'titipass')
+  u = User.new(username: 'titi', name: 'Titi', address: 'There', email: 'titi@hazeliris.com', password: 'titipass')
   u.save
 end
+
+[ 'aoeua', 'ountha', 'sthsa' ].each do |name|
+  p = Product.new(name: name,
+                  price: Random.rand(100..5000),
+                  description: 'aoetnuhaoseu aonse uaonethuaoneuhasoe uasontuh'
+                 )
+  p.save
+end
+
+connection = ActiveRecord::Base.connection()
+connection.execute("UPDATE products SET photo = 'image/upload/v1585723801/xie5vjfkd4eocadksusl.jpg'")
