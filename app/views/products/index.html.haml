@@ -7,10 +7,17 @@
       = cl_image_tag product.photo.thumb, secure: true, class: 'card-img-top img-fluid'
       .card-body
         .card-title
-          = product.name
-          - if allow_edit
-            = link_to edit_product_path(product) do
-              %i.far.fa-edit
+          .float-left
+            = link_to product_path(product), class: 'card-link' do
+              = product.name
+          .float-right
+            = link_to add_product_cart_index_path(id: product.id), method: :post, remote: true do
+              %i.fas.fa-cart-plus
+            - if @cart.has_key? product.id.to_s
+              = link_to remove_product_cart_index_path(id: product.id), method: :post, remote: true do
+                %i.fas.fa-cart-arrow-down
+            - if allow_edit
+              = link_to edit_product_path(product) do
+                %i.far.fa-edit
+          .clearfix
         .card-text= product.description
-        = link_to product_path(product), class: 'card-link' do
-          %i.far.fa-eye

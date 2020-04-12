@@ -31,6 +31,9 @@
               %i.fas.fa-tachometer-alt
               Home
             - if user_signed_in?
+              = link_to cart_index_path, class: 'nav-item nav-link' do
+                %i.fas.fa-shopping-cart
+                Cart
               - if current_user.has_role? :admin
                 = link_to admin_index_path, class: 'nav-item nav-link' do
                   %i.fas.fa-user-shield

@@ -2,6 +2,7 @@ class ProductsController < ApplicationController
   respond_to :html
 
   def index
+    @cart = cart_from_session
   end
 
   def show
@@ -42,5 +43,10 @@ class ProductsController < ApplicationController
 
   def product_params
     params.require(:product).permit(:name, :description, :price, :photo, :photo_cache, :order)
+  end
+
+  #TODO: extract to tools
+  def cart_from_session
+    session[:cart] ||= {}
   end
 end

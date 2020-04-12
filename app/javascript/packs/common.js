@@ -9,9 +9,7 @@ ActiveStorage.start();
 
 import 'channels';
 
+// require.context('../images', true, /\.(?:png|jpg|gif|ico|svg)$/);
 
-import 'css/fontawesome.scss';
 import '@fortawesome/fontawesome-free';
-
-import 'css/bootstrap4.scss';
 import 'bootstrap';

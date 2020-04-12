@@ -8,5 +8,14 @@ Rails.application.routes.draw do
 
   resources :products, except: [:destroy]
 
+  resources :cart, only: [:index] do
+    collection do
+      get :content, format: :json
+      post :add_product
+      post :remove_product
+      post :checkout
+    end
+  end
+
   root to: "products#index"
 end

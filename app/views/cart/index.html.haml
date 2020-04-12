@@ -1,0 +1,41 @@
+- content_for :packs, 'bootstrap-tempusdominus,bootstrap-table,market-cart-content'
+- content_for :no_css_packs, 'market-cart-content'
+
+.h3.text-center Cart content
+
+%table.text-center#cart{data: {url: content_cart_index_path, toggle: 'table'}}
+  %thead
+    %tr    
+      %th{'data-field': 'name'} Product
+      %th{'data-field': 'qty'} Quantity
+      %th{'data-field': 'price', 'data-formatter': 'cart_price_formatter'} Unit Price
+
+%br/
+
+.h3.text-center Delivery choices
+
+= form_with url: checkout_cart_index_path do |f|
+  = f.hidden_field :cart_sign, value: @cart_sign
+
+  .form-row
+    .col
+      .input-group
+        = f.label :delivery_hour_range, class: 'form-control col-sm-2'
+        - hour_ranges = [ '8-12', '12-14', '14-16', '16-18', '18-20', '20-21']
+        = f.select :delivery_hour_range, hour_ranges, {}, {class: 'form-control col-sm-10'}
+
+  .form-row
+    .col
+      .input-group.date#delivery_date_picker{data: {'target-input':"nearest", 'date-format': "YYYY-MM-DD"}}
+        = f.label :delivery_date, class: 'form-control col-sm-2'
+        = f.text_field :delivery_date, class: 'form-control datetimepicker-input', 'data-target': "#delivery_date_picker"
+        .input-group-append{data: {target: "#delivery_date_picker", toggle: "datetimepicker"}}
+          .input-group-text
+            %i.fas.fa-calendar
+              
+  %br/
+  
+  .text-center
+    = f.button 'Validate order', class: 'btn btn-primary'
+
+  
