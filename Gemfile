@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.5'
+ruby '2.6.6'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.2', '>= 6.0.2.2'
@@ -68,9 +68,11 @@ group :development do
   gem 'meta_request'
   gem 'pry'
   gem 'pry-doc'
+  gem 'rubocop-rails'
 end
 
 group :test do
+  gem 'simplecov', '~> 0.18'
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
