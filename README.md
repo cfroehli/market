@@ -4,7 +4,9 @@ This is just a sandbox project used while learning ruby/rails. Do not trust this
 
 # TravisCI
 
-[![Build Status](https://travis-ci.com/cfroehli/tutor_scheduler.svg?branch=master)](https://travis-ci.com/cfroehli/tutor_scheduler)
+[![Build Status](https://travis-ci.com/cfroehli/market.svg?branch=master)](https://travis-ci.com/cfroehli/market)
+[![Maintainability](https://api.codeclimate.com/v1/badges/4148b44ce36c5b1b02ed/maintainability)](https://codeclimate.com/github/cfroehli/market/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/4148b44ce36c5b1b02ed/test_coverage)](https://codeclimate.com/github/cfroehli/market/test_coverage)
 
 # Coverage
 
@@ -15,8 +17,30 @@ This is just a sandbox project used while learning ruby/rails. Do not trust this
     ~~~
 
 # Notes about running system tests
+  * I have multiple network interfaces and the rails/selenium/proxy servers
+    may end up not seen each other. Depending on the configuration used, the correct
+    interface to use may not be autodetected. It is possible to force the address to
+    use by setting a few envvars. By default, it is assumed all the services are running
+    on localhost.
+    ~~~bash
+    # used by development server (rails s)
+    export RAILS_WEBSERVER_HOST="10.26.0.2"
+    # used by test runner (rails spec)
+    export RAILS_TEST_WEBSERVER_HOST="10.26.0.3"
+    # used to intercept external request while testing and mock
+    # 3rd party js service api
+    export RAILS_TEST_PROXY_HOST="10.26.0.4"
+    ~~~
 
-  * selenium containers config in docker compose
+  * stripe api will require a salt to encrypt the tested event
+    production server are setup with Stripe generated keys, for the test environment
+    I just set some random value so the event can be generated/decoded without issue
+    ~~~bash
+    export STRIPE_ENDPOINT_SECRET="abc123"
+    ~~~
+
+
+ * selenium containers config in docker compose
     ~~~yaml
     selenium-hub:
        image: selenium/hub:latest
@@ -54,26 +78,24 @@ This is just a sandbox project used while learning ruby/rails. Do not trust this
 
    * single container with vncserver
      ~~~bash
-       export USE_SELENIUM_CONTAINERS=Y
-       # edit application_system_test_case.rb => using: :chrome
-       # reduce test worker pool to 1 (or they'll fight for the only browser available)
+       export USE_SELENIUM_CONTAINERS=true
+       # edit spec/support/capybara.rb => using: :chrome instead of :headless_chrome
        docker-compose up -d selenium-chrome-standalone
        vncviewer {selenium-chrome-standalone ip} &
-       rails test:system
+       rails spec
      ~~~
 
    * or with a workers pool
      ~~~bash
-       export USE_SELENIUM_CONTAINERS=Y
-       # edit application_system_test_case.rb => driven_by using: :headless_chrome
+       export USE_SELENIUM_CONTAINERS=true
        docker-compose up -d selenium-hub
        docker-compose up -d --scale selenium-chrome=4 selenium-chrome
-       rails test:system
+       rails parallel:spec
      ~~~
 
    * or local chrome
      ~~~bash
        unset USE_SELENIUM_CONTAINERS
-       # edit application_system_test_case.rb => driven_by using: :headless_chrome or :chrome
-       rails test:system
+       # edit spec/support/capybara.rb => driven_by using: :headless_chrome or :chrome
+       rails spec
      ~~~

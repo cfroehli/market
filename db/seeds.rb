@@ -6,7 +6,6 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-
 u = User.find_by(username: 'toto')
 if u.nil?
   u = User.new(username: 'toto', name: 'Toto', address: 'Here', email: 'toto@hazeliris.com', password: 'totopass')
@@ -14,18 +13,18 @@ if u.nil?
   u.save
 end
 
-
 u = User.find_by(username: 'titi')
 if u.nil?
   u = User.new(username: 'titi', name: 'Titi', address: 'There', email: 'titi@hazeliris.com', password: 'titipass')
   u.save
 end
 
-[ 'aoeua', 'ountha', 'sthsa' ].each do |name|
-  p = Product.new(name: name,
-                  price: Random.rand(100..5000),
-                  description: 'aoetnuhaoseu aonse uaonethuaoneuhasoe uasontuh'
-                 )
+%w[aoeua ountha sthsa].each do |name|
+  p = Product.new(
+    name: name,
+    price: Random.rand(100..5000),
+    description: 'aoetnuhaoseu aonse uaonethuaoneuhasoe uasontuh'
+  )
   p.save
 end
 

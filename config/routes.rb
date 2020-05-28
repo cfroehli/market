@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  devise_for :users, path: 'auth', path_names: {sign_in: 'login', sign_out: 'logout', sign_up: 'register'}
+  devise_for :users, path: 'auth', path_names: { sign_in: 'login',
+                                                 sign_out: 'logout',
+                                                 sign_up: 'register' }
 
   resources :admin, only: [:index] do
     post :impersonate, on: :member
@@ -17,5 +19,5 @@ Rails.application.routes.draw do
     end
   end
 
-  root to: "products#index"
+  root to: 'products#index'
 end

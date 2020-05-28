@@ -34,6 +34,7 @@ class ProductsController < ApplicationController
   end
 
   private
+
   def find_product
     Product.find(params[:id])
   rescue ActiveRecord::RecordNotFound
@@ -45,7 +46,7 @@ class ProductsController < ApplicationController
     params.require(:product).permit(:name, :description, :price, :photo, :photo_cache, :order)
   end
 
-  #TODO: extract to tools
+  # TODO: extract to tools
   def cart_from_session
     session[:cart] ||= {}
   end

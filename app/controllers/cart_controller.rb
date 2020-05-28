@@ -4,14 +4,14 @@ class CartController < ApplicationController
     [100000, 1000],
     [30000,  600],
     [10000,  400],
-    [0, 300]
-  ]
+    [0, 300],
+  ].freeze
 
   def index
     cart = cart_from_session
     if cart.empty?
       flash[:success] = 'Your cart is empty. Choose some product first.'
-      redirect_to root_path and return
+      redirect_to root_path && return
     end
     @cart_sign = cart_current_sign
   end
@@ -21,7 +21,7 @@ class CartController < ApplicationController
     product_id = product.id.to_s
     cart = cart_from_session
     cart[product_id] = (cart[product_id] || 0) + 1
-    @added_product = [ product.name, cart[product_id] ]
+    @added_product = [product.name, cart[product_id]]
     mark_cart_updated
   end
 
@@ -32,18 +32,17 @@ class CartController < ApplicationController
     quantity = (cart[product_id] || 0) - 1
     cart[product_id] = quantity
     cart.delete product_id if quantity <= 0
-    @remaining_product = [ product.name, 0 ]
+    @remaining_product = [product.name, 0]
     mark_cart_updated
   end
 
   def checkout
     if params[:cart_sign] != cart_current_sign
       flash[:danger] = 'Cart content was updated in the meanwhile. Please reconfirm with current content.'
-      redirect_to cart_index_path and return
+      redirect_to cart_index_path && return
     end
 
-    #TODO: register order content, send delivery notification ...
-
+    # TODO: register order content, send delivery notification ...
     clear_cart
     flash[:success] = 'Your order was registered and will be processed soon.'
     redirect_to root_path
@@ -51,8 +50,9 @@ class CartController < ApplicationController
 
   def content
     cart = cart_from_session
-    cart_value, cart_size = 0, 0
-    cart_products = Product.find(cart.keys.map{|k| k.to_s.to_i}.to_a)
+    cart_value = 0
+    cart_size = 0
+    cart_products = Product.find(cart.keys.map { |k| k.to_s.to_i }.to_a)
     @content = cart_products.map do |product|
       quantity = cart[product.id.to_s]
       cart_value += quantity * product.price
@@ -66,16 +66,17 @@ class CartController < ApplicationController
     @content += [
       { name: 'Packaging fees',   qty: nil, price: packaging_fees     },
       { name: 'Shipping fees',    qty: nil, price: shipping_fees      },
-      { name: 'Total (tax inc.)', qty: nil, price: total_tax_included }
+      { name: 'Total (tax inc.)', qty: nil, price: total_tax_included },
     ]
   end
 
   private
+
   def find_product
     Product.find(params[:id])
   end
 
-  #TODO: extract to tools
+  # TODO: extract to tools
   def cart_from_session
     session[:cart] ||= {}
   end
@@ -94,10 +95,10 @@ class CartController < ApplicationController
   end
 
   def compute_packaging_fees(cart_value)
-    PACKAGING_FEES_LADDER.find {|f| f[0] <= cart_value}[1]
+    PACKAGING_FEES_LADDER.find { |f| f[0] <= cart_value }[1]
   end
 
   def compute_shipping_fees(cart_size)
-    ((cart_size / 5) + 1) * 600 #cost = 600 per batch of 5 articles
+    ((cart_size / 5) + 1) * 600 # cost = 600 per batch of 5 articles
   end
 end
