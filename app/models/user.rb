@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   rolify
   # Include default devise modules. Others available are:
@@ -8,9 +10,7 @@ class User < ApplicationRecord
 
   attr_writer :login
 
-  after_create do
-    self.add_role :user if self.roles.blank?
-  end
+  after_create { add_role(:user) }
 
   def login
     @login || self.username || self.email
@@ -18,12 +18,7 @@ class User < ApplicationRecord
 
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
-    if (login = conditions.delete(:login))
-      where(conditions).find_by(['lower(username) = :value OR lower(email) = :value', { value: login.downcase }])
-    elsif conditions[:username].nil?
-      find_by(conditions)
-    else
-      find_by(username: conditions[:username])
-    end
+    login = conditions.delete(:login)
+    where(conditions).find_by(['lower(username) = :value OR lower(email) = :value', { value: login.downcase }])
   end
 end

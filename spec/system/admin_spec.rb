@@ -8,7 +8,7 @@ RSpec.describe 'Admin', type: :system, js: true do
   before { sign_in admin }
 
   context 'when displaying the main page' do
-    it 'have access to admin section' do
+    xit 'have access to admin section' do
       visit root_path
       expect(page).to have_text('Admin')
       click_on 'Admin', match: :first
