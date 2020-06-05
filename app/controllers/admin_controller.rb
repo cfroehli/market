@@ -1,4 +1,8 @@
 class AdminController < ApplicationController
+  def index
+    authorize :admin
+  end
+
   def impersonate
     authorize User
     user = User.find(params[:id])

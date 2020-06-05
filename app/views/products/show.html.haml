@@ -9,7 +9,7 @@
   .lead
     = @product.description
   %hr.my-4
-  %p= "Unit price: #{@product.price}円"
+  %p Unit price: #{@product.price}円
   .lead.text-center
     = link_to add_product_cart_index_path(id: @product), method: :post, remote: true do
       Add to cart
