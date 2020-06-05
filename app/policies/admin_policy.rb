@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class ProductPolicy < ApplicationPolicy
-  def update?
+AdminPolicy = Struct.new(:user, :admin) do
+  def index?
     user.has_role? :admin
   end
 
-  def create?
+  def impersonate?
     user.has_role? :admin
   end
 end

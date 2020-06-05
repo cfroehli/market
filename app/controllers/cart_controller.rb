@@ -52,12 +52,14 @@ class CartController < ApplicationController
     cart = cart_from_session
     cart_value = 0
     cart_size = 0
-    cart_products = Product.find(cart.keys.map { |k| k.to_s.to_i }.to_a)
+    cart_products = Product.find(cart.keys.map { |key| key.to_s.to_i }.to_a)
     @content = cart_products.map do |product|
-      quantity = cart[product.id.to_s]
-      cart_value += quantity * product.price
+      product_id = product.id
+      price = product.price
+      quantity = cart[product_id.to_s]
+      cart_value += quantity * price
       cart_size += quantity
-      { id: product.id, name: product.name, qty: quantity, price: product.price }
+      { id: product_id, name: product.name, qty: quantity, price: price }
     end
     packaging_fees = compute_packaging_fees cart_value
     shipping_fees = compute_shipping_fees cart_size
@@ -95,7 +97,7 @@ class CartController < ApplicationController
   end
 
   def compute_packaging_fees(cart_value)
-    PACKAGING_FEES_LADDER.find { |f| f[0] <= cart_value }[1]
+    PACKAGING_FEES_LADDER.find { |fees| fees[0] <= cart_value }[1]
   end
 
   def compute_shipping_fees(cart_size)

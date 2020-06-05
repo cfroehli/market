@@ -1,12 +1,13 @@
 class ProductsController < ApplicationController
   respond_to :html
 
+  before_action :set_product, only: %i[show edit update]
+
   def index
     @cart = cart_from_session
   end
 
   def show
-    @product = find_product
   end
 
   def new
@@ -22,12 +23,10 @@ class ProductsController < ApplicationController
   end
 
   def edit
-    @product = find_product
     authorize @product
   end
 
   def update
-    @product = find_product
     authorize @product
     flash[:success] = 'Post was successfully updated.' if @product.update(product_params)
     respond_with @product
@@ -35,11 +34,8 @@ class ProductsController < ApplicationController
 
   private
 
-  def find_product
-    Product.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    flash[:danger] = "Product not found [#{params[:id]}]."
-    redirect_to :index
+  def set_product
+    @product = Product.find(params[:id])
   end
 
   def product_params
