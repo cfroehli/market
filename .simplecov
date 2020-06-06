@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if ENV['COVERAGE']
   SimpleCov.start 'rails' do
     add_filter 'app/channels'

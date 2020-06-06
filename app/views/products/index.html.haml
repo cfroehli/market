@@ -1,9 +1,13 @@
-.h3.text-center Products
+.h3.text-center
+  Products
+  - if current_user.has_role? :admin
+    = link_to new_product_path do
+      %i.fas.fa-plus
 
 .card-columns
   - allow_edit = current_user.has_role? :admin
   - Product.enabled.order(order: :desc).each do |product|
-    .card
+    .card{ id: "product-#{product.id}" }
       = cl_image_tag product.photo.thumb, secure: true, class: 'card-img-top img-fluid'
       .card-body
         .card-title

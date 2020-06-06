@@ -1,4 +1,8 @@
+# frozen_string_literal: true
+
 class CartController < ApplicationController
+  before_action :set_product, only: %i[add_product remove_product]
+
   TAX_RATE = 0.08
   PACKAGING_FEES_LADDER = [
     [100000, 1000],
@@ -11,28 +15,27 @@ class CartController < ApplicationController
     cart = cart_from_session
     if cart.empty?
       flash[:success] = 'Your cart is empty. Choose some product first.'
-      redirect_to root_path && return
+      redirect_to root_path
+    else
+      @cart_sign = cart_current_sign
     end
-    @cart_sign = cart_current_sign
   end
 
   def add_product
-    product = find_product
-    product_id = product.id.to_s
+    product_id = @product.id.to_s
     cart = cart_from_session
     cart[product_id] = (cart[product_id] || 0) + 1
-    @added_product = [product.name, cart[product_id]]
+    @added_product = [@product.name, cart[product_id]]
     mark_cart_updated
   end
 
   def remove_product
-    product = find_product
-    product_id = product.id.to_s
+    product_id = @product.id.to_s
     cart = cart_from_session
     quantity = (cart[product_id] || 0) - 1
     cart[product_id] = quantity
     cart.delete product_id if quantity <= 0
-    @remaining_product = [product.name, 0]
+    @remaining_product = [@product.name, 0]
     mark_cart_updated
   end
 
@@ -74,8 +77,8 @@ class CartController < ApplicationController
 
   private
 
-  def find_product
-    Product.find(params[:id])
+  def set_product
+    @product = Product.find(params[:id])
   end
 
   # TODO: extract to tools

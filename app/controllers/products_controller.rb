@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProductsController < ApplicationController
   respond_to :html
 
@@ -11,13 +13,13 @@ class ProductsController < ApplicationController
   end
 
   def new
+    authorize :product
     @product = Product.new
-    authorize @product
   end
 
   def create
+    authorize :product
     @product = Product.new(product_params)
-    authorize @product
     flash[:success] = 'Product was successfully created.' if @product.save
     respond_with @product
   end
@@ -28,7 +30,7 @@ class ProductsController < ApplicationController
 
   def update
     authorize @product
-    flash[:success] = 'Post was successfully updated.' if @product.update(product_params)
+    flash[:success] = 'Product was successfully updated.' if @product.update(product_params)
     respond_with @product
   end
 

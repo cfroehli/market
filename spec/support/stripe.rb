@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Billy.configure do |config|
   config.proxy_host = ENV.fetch('RAILS_TEST_PROXY_HOST') { '127.0.0.1' }
 end
@@ -30,9 +32,16 @@ Billy.proxy.reset_cache
 puts "Proxing external requests to #{Billy.proxy.host}:#{Billy.proxy.port}"
 
 module StripeTestHelpers
-  def stripe_event_headers(event_json)
+  _forced_stripe_endpoint_secret = nil
+  define_method(:with_stripe_endpoint_secret) do |stripe_endpoint_secret, &block|
+    _forced_stripe_endpoint_secret = stripe_endpoint_secret
+    block.call
+    _forced_stripe_endpoint_secret = nil
+  end
+
+  define_method(:stripe_event_headers) do |event_json|
     timestamp = Time.current
-    secret = ENV['STRIPE_ENDPOINT_SECRET']
+    secret = _forced_stripe_endpoint_secret || ENV['STRIPE_ENDPOINT_SECRET']
     signature = Stripe::Webhook::Signature.compute_signature(timestamp, event_json, secret)
     scheme = Stripe::Webhook::Signature::EXPECTED_SCHEME
     { "Stripe-Signature": Stripe::Webhook::Signature.generate_header(timestamp, signature, scheme: scheme) }
@@ -66,7 +75,7 @@ module StripeTestHelpers
     post on_event_stripe_index_path, params: event, headers: headers, as: :json
   end
 
-  def send_product_checkout_completed_event(session) # rubocop:disable Metric/MethodLength
+  def send_product_checkout_completed_event(session) # rubocop:disable Metrics/MethodLength
     send_event(
       'checkout.session.completed',
       {
