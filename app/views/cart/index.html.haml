@@ -15,7 +15,7 @@
 .h3.text-center Delivery choices
 
 = form_with url: checkout_cart_index_path do |f|
-  = f.hidden_field :cart_sign, value: @cart_sign
+  = f.hidden_field :cart_sign, value: @cart.signature
 
   .form-row
     .col
