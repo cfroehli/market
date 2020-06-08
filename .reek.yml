@@ -3,6 +3,10 @@ detectors:
     exclude:
       - "User#login"
 
+  DuplicateMethodCall:
+    exclude:
+      - "Market::Pricer.price"
+
   TooManyStatements:
     max_statements: 8
 

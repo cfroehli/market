@@ -7,14 +7,6 @@ class CartController < ApplicationController
   before_action :set_cart, only: %i[index add_product remove_product checkout content]
   before_action :verify_cart_signature, only: %i[checkout]
 
-  TAX_RATE = 0.08
-  PACKAGING_FEES_LADDER = [
-    [100000, 1000],
-    [30000,  600],
-    [10000,  400],
-    [0, 300],
-  ].freeze
-
   def index
     if @cart.empty?
       flash[:success] = 'Your cart is empty. Choose some product first.'
@@ -38,25 +30,8 @@ class CartController < ApplicationController
   end
 
   def content
-    cart_value = 0
-    cart_size = 0
-    @content = Product.find(@cart.map { |id, _| id.to_i }).map do |product|
-      id = product.id
-      quantity = @cart[id.to_s]
-      price = product.price
-      cart_value += quantity * price
-      cart_size += quantity
-      { id: id, name: product.name, qty: quantity, price: price }
-    end
-    packaging_fees = compute_packaging_fees cart_value
-    shipping_fees = compute_shipping_fees cart_size
-    total = cart_value + packaging_fees + shipping_fees
-    total_tax_included = total + (total * TAX_RATE).floor
-    @content += [
-      { name: 'Packaging fees',   qty: nil, price: packaging_fees     },
-      { name: 'Shipping fees',    qty: nil, price: shipping_fees      },
-      { name: 'Total (tax inc.)', qty: nil, price: total_tax_included },
-    ]
+    pricing = ::Market::Pricer.price(@cart)
+    @content = pricing[:detail]
   end
 
   private
@@ -70,13 +45,5 @@ class CartController < ApplicationController
 
     flash[:danger] = 'Cart content was updated in the meanwhile. Please reconfirm with current content.'
     redirect_to cart_index_path
-  end
-
-  def compute_packaging_fees(cart_value)
-    PACKAGING_FEES_LADDER.find { |fees| fees[0] <= cart_value }[1]
-  end
-
-  def compute_shipping_fees(cart_size)
-    ((cart_size / 5) + 1) * 600 # cost = 600 per batch of 5 articles
   end
 end
