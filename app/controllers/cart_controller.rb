@@ -23,7 +23,7 @@ class CartController < ApplicationController
   end
 
   def checkout
-    # TODO: register order content, send delivery notification ...
+    current_user.orders.create.from_cart(@cart)
     @cart.clear
     flash[:success] = 'Your order was registered and will be processed soon.'
     redirect_to root_path

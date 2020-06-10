@@ -66,6 +66,11 @@ RSpec.describe 'User', type: :system, js: true do
 
       click_on 'Cart'
       expect(page).to have_text('Your cart is empty. Choose some product first.')
+
+      visit root_path
+      click_on 'Orders'
+      expect(page).to have_current_path(orders_path)
+
     end
   end
 end

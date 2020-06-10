@@ -10,10 +10,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_09_020459) do
+ActiveRecord::Schema.define(version: 2020_06_09_042850) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "order_product_snapshots", id: false, force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.bigint "product_snapshot_id", null: false
+    t.integer "quantity", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["order_id"], name: "index_order_product_snapshots_on_order_id"
+    t.index ["product_snapshot_id"], name: "index_order_product_snapshots_on_product_snapshot_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
+  create_table "product_snapshots", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.string "name", null: false
+    t.integer "price", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["product_id"], name: "index_product_snapshots_on_product_id"
+  end
 
   create_table "products", force: :cascade do |t|
     t.string "name", limit: 60, null: false
@@ -56,9 +82,15 @@ ActiveRecord::Schema.define(version: 2020_04_09_020459) do
   create_table "users_roles", id: false, force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "role_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["role_id"], name: "index_users_roles_on_role_id"
     t.index ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id"
     t.index ["user_id"], name: "index_users_roles_on_user_id"
   end
 
+  add_foreign_key "order_product_snapshots", "orders"
+  add_foreign_key "order_product_snapshots", "product_snapshots"
+  add_foreign_key "orders", "users"
+  add_foreign_key "product_snapshots", "products"
 end

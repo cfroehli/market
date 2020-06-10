@@ -5,14 +5,14 @@ Rails.application.routes.draw do
                                                  sign_out: 'logout',
                                                  sign_up: 'register' }
 
-  resources :admin, only: [:index] do
+  resources :admin, only: %i[index] do
     post :impersonate, on: :member
     post :stop_impersonating, on: :collection
   end
 
-  resources :products, except: [:destroy]
+  resources :products, except: %i[destroy]
 
-  resources :cart, only: [:index] do
+  resources :cart, only: %i[index] do
     collection do
       get :content, format: :json
       post :add_product
@@ -20,6 +20,8 @@ Rails.application.routes.draw do
       post :checkout
     end
   end
+
+  resources :orders, only: %i[index]
 
   root to: 'products#index'
 end

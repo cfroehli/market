@@ -28,7 +28,7 @@ module Market
     end
 
     def self.compute_shipping_fees(items_pricing)
-      items_count = items_pricing.sum(&hashgetter(:quantity))
+      items_count = items_pricing.sum(&hashgetter(:qty))
       shipping_fees = ((items_count / 5) + 1) * 600 # cost = 600 per batch of 5 articles
       { name: 'Shipping fees', qty: nil, price: shipping_fees }
     end

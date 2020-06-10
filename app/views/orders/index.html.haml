@@ -1,0 +1,9 @@
+- current_user.orders.order(updated_at: :desc).each do |order|
+  %br/
+  .card
+    .card-header
+      #{order.updated_at}
+    .card-body
+      - order.items.each do |item|
+        #{item.quantity} x #{item.product_snapshot.name}@#{item.product_snapshot.price}
+        %br/

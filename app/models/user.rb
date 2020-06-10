@@ -8,9 +8,11 @@ class User < ApplicationRecord
 
   validates :username, presence: true, uniqueness: { case_sensitive: false }, length: { minimum: 1, maximum: 20 }, format: /\A[a-zA-Z0-9_.]+\z/
 
-  attr_writer :login
+  has_many :orders
 
   after_create { add_role(:user) }
+
+  attr_writer :login
 
   def login
     @login || self.username || self.email
