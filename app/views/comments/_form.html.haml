@@ -1,0 +1,6 @@
+= form_with model: [@post.product, @post, @post.comments.build], local: true do |f|
+  .form-group
+    = f.label :content, class: 'col-form-label'
+    = f.text_area :content, rows: 15, id: 'comment-content-area', class: 'form-control'
+    %br/
+    = f.button 'Submit', class: 'btn btn-primary'

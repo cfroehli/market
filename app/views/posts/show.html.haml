@@ -1,0 +1,24 @@
+= render partial: 'post',
+         locals: { post: @post,
+                   liked_posts_ids: current_user.liked_posts.pluck(:id),
+                   preview_mode: false }
+
+%hr/
+
+.h3 Comments
+- @post.comments.with_username.order(:updated_at).each do |comment|
+  .card
+    .card-header
+      At
+      = comment.created_at.to_s(:timestamp)
+      ,
+      = comment.user_name
+      said:
+    .card-body
+      .card-text
+        = comment.content
+
+%hr/
+
+.h3 Say something too !
+= render 'comments/form'

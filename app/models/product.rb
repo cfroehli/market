@@ -5,6 +5,7 @@ class Product < ApplicationRecord
   validates :description, presence: true, length: { minimum: 0, maximum: 1024 }
 
   has_many :snapshots, class_name: 'ProductSnapshot', inverse_of: :product
+  has_many :posts
 
   scope :enabled, -> { where(enabled: true) }
 

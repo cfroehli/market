@@ -111,6 +111,8 @@ GEM
       aws_cf_signer
       rest-client
     coderay (1.1.3)
+    composite_primary_keys (12.0.2)
+      activerecord (~> 6.0.0)
     concurrent-ruby (1.1.6)
     cookiejar (0.3.3)
     crass (1.0.6)
@@ -415,16 +417,17 @@ DEPENDENCIES
   byebug
   capybara (>= 2.15)
   carrierwave (~> 2.1.0)
-  cloudinary (~> 1.13)
-  devise (~> 4.7.1)
+  cloudinary (~> 1.14.0)
+  composite_primary_keys (~> 12.0.0)
+  devise (~> 4.7.0)
   factory_bot_rails (~> 5.2.0)
-  haml-rails (~> 2.0.1)
+  haml-rails (~> 2.0.0)
   jbuilder (~> 2.7)
   listen (>= 3.2.1, < 3.3)
   meta_request
   parallel_tests (~> 2.32.0)
   pg (>= 0.18, < 2.0)
-  pretender (~> 0.3.4)
+  pretender (~> 0.3.0)
   pry
   pry-doc
   puffing-billy (~> 2.3.0)

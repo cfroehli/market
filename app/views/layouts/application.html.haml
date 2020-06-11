@@ -30,6 +30,10 @@
             = link_to root_path, class: 'nav-item nav-link' do
               %i.fas.fa-tachometer-alt
               Home
+            - if Post.exists?
+              = link_to posts_path, class: 'nav-item nav-link' do
+                %i.fas.fa-comments
+                Voices
             - if user_signed_in?
               = link_to cart_index_path, class: 'nav-item nav-link' do
                 %i.fas.fa-shopping-cart

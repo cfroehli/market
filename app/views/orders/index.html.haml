@@ -4,6 +4,12 @@
     .card-header
       #{order.updated_at}
     .card-body
+      - posts = current_user.posts.map(&:product_id).to_set
       - order.items.each do |item|
+
         #{item.quantity} x #{item.product_snapshot.name}@#{item.product_snapshot.price}
+        - product_id = item.product_snapshot.product_id
+        - if !posts.include?(product_id)
+          = link_to new_product_post_path(product_id: product_id), class: 'nav-item nav-link' do
+            Create post
         %br/

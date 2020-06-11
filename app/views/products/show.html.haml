@@ -9,8 +9,15 @@
   .lead
     = @product.description
   %hr.my-4
-  %p Unit price: #{@product.price}円
+  %p.text-right Unit price: #{@product.price}円
   .lead.text-center
     = link_to add_product_cart_index_path(id: @product), method: :post, remote: true do
       Add to cart
       %i.fas.fa-cart-plus
+  %hr.my-4
+  .h3.text-center Reviews
+  - @product.posts.with_username.each do |post|
+    = render partial: 'posts/post',
+             locals: { post: post,
+                       liked_posts_ids: current_user.liked_posts.pluck(:id),
+                       preview_mode: true }

@@ -10,6 +10,13 @@ class User < ApplicationRecord
 
   has_many :orders
 
+  has_many :likes, dependent: :destroy
+  has_many :liked_posts, through: :likes, source: :post
+
+  has_many :comments, dependent: :destroy
+
+  has_many :posts, dependent: :destroy
+
   after_create { add_role(:user) }
 
   attr_writer :login

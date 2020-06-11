@@ -1,0 +1,8 @@
+.h1
+  Dear #{@post.user.username},
+
+%p
+  You've got a new comment on
+  = link_to @post do
+    post
+    = @post.id

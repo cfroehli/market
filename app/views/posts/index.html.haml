@@ -1,0 +1,5 @@
+= render partial: 'post',
+         collection: @posts.with_username.order(updated_at: :desc),
+         as: 'post',
+         locals: { liked_posts_ids: current_user.liked_posts.pluck(:id),
+                   preview_mode: true }

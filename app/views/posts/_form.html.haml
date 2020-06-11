@@ -1,0 +1,15 @@
+= form_with model: [:product, post] do |f|
+  - if post.errors.any?
+    #error_explanation
+      %h2
+        #{pluralize(post.errors.count, 'error')} prohibited this post from being saved:
+      %ul
+        - post.errors.full_messages.each do |message|
+          %li= message
+
+  .form-group
+    = f.label :content, class: 'col-form-label'
+    = f.text_area :content, rows: 15, id: 'post-content-area', class: 'form-control'
+
+    %br/
+    = f.button 'Submit', class: 'btn btn-primary'

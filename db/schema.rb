@@ -10,10 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_09_042850) do
+ActiveRecord::Schema.define(version: 2020_06_11_014916) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "comments", force: :cascade do |t|
+    t.bigint "post_id", null: false
+    t.bigint "user_id", null: false
+    t.text "content"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["post_id"], name: "index_comments_on_post_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "likes", force: :cascade do |t|
+    t.bigint "post_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["post_id"], name: "index_likes_on_post_id"
+    t.index ["user_id"], name: "index_likes_on_user_id"
+  end
 
   create_table "order_product_snapshots", id: false, force: :cascade do |t|
     t.bigint "order_id", null: false
@@ -30,6 +49,17 @@ ActiveRecord::Schema.define(version: 2020_06_09_042850) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
+  create_table "posts", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "product_id", null: false
+    t.text "content"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "likes_count", default: 0
+    t.index ["product_id"], name: "index_posts_on_product_id"
+    t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
   create_table "product_snapshots", force: :cascade do |t|
@@ -74,6 +104,7 @@ ActiveRecord::Schema.define(version: 2020_06_09_042850) do
     t.string "username", limit: 20, null: false
     t.string "name", null: false
     t.string "address", null: false
+    t.integer "likes_count", default: 0
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
@@ -89,8 +120,14 @@ ActiveRecord::Schema.define(version: 2020_06_09_042850) do
     t.index ["user_id"], name: "index_users_roles_on_user_id"
   end
 
+  add_foreign_key "comments", "posts"
+  add_foreign_key "comments", "users"
+  add_foreign_key "likes", "posts"
+  add_foreign_key "likes", "users"
   add_foreign_key "order_product_snapshots", "orders"
   add_foreign_key "order_product_snapshots", "product_snapshots"
   add_foreign_key "orders", "users"
+  add_foreign_key "posts", "products"
+  add_foreign_key "posts", "users"
   add_foreign_key "product_snapshots", "products"
 end

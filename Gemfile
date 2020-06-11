@@ -27,20 +27,22 @@ gem 'jbuilder', '~> 2.7'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
+gem 'composite_primary_keys', '~> 12.0.0'
+
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
 
 # Use Haml templates
-gem 'haml-rails', '~> 2.0.1'
+gem 'haml-rails', '~> 2.0.0'
 
 # Reduce controller code (respond_to/respond_with)
 gem 'responders', '~> 3.0.0'
 
 # Authentification tools
-gem 'devise', '~> 4.7.1'
+gem 'devise', '~> 4.7.0'
 
 # Impersonation
-gem 'pretender', '~> 0.3.4'
+gem 'pretender', '~> 0.3.0'
 
 # Roles/Authorization
 gem 'pundit', '~> 2.1.0'
@@ -48,7 +50,7 @@ gem 'rolify', '~> 5.2.0'
 
 # Image upload
 gem 'carrierwave', '~> 2.1.0'
-gem 'cloudinary', '~> 1.13'
+gem 'cloudinary', '~> 1.14.0'
 
 # Inline css in email
 gem 'roadie', '~> 4.0'

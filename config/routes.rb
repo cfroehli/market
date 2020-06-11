@@ -10,7 +10,15 @@ Rails.application.routes.draw do
     post :stop_impersonating, on: :collection
   end
 
-  resources :products, except: %i[destroy]
+  resources :likes, only: %i[create]
+  resources :posts, only: %i[index]
+
+  resources :products, except: %i[destroy] do
+    resources :posts, except: %i[index] do
+      resources :comments, only: %i[create]
+      get 'liked', on: :collection
+    end
+  end
 
   resources :cart, only: %i[index] do
     collection do

@@ -1,0 +1,50 @@
+.card
+  .card-header
+    .row
+      .col-sm-8
+        At #{post.updated_at.to_s(:timestamp)}
+        %i.fa.fa-user
+        #{post.user_name} reviewed #{post.product.name}:
+      .col-sm-4
+        - if post.likes.size.positive?
+          %div{data: { toggle: 'tooltip', html: true },
+               title: post.liking_users.pluck(:username).join('<br/>')}
+            = post.likes.size
+            %i.far.fa-heart
+        - else
+          No
+          %i.far.fa-thumbs-up
+          yet !
+          %i.fas.fa-heart-broken
+  .card-body
+    .card-text
+      - if preview_mode
+        .row
+          .col-sm-10= headline(post)
+      - else
+        .row
+          .col-sm-12= post.content
+    .card-link
+      %br/
+      .row
+        - if preview_mode
+          .col
+            = link_to product_post_path(post.product, post) do
+              %i.fa.fa-eye
+              View full post
+        - if current_user.id == post.user_id
+          .col
+            = link_to edit_product_post_path(post.product, post) do
+              %i.fa.fa-edit
+              Edit post
+          .col
+            = link_to product_post_path(post.product, post), method: :delete, data: { confirm: 'Are you sure?' } do
+              %i.far.fa-trash-alt
+              Delete post
+        - else
+          .col
+            - unless liked_posts_ids.include? post.id
+              = link_to likes_path(id: post.id), method: :post do
+                %i.far.fa-thumbs-up
+                +1
+%br/
